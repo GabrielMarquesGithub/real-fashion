@@ -1,38 +1,22 @@
-import Categories from "./components/categories/categories.component";
+//import do React Routes para trabalhar com rotas
+import { Routes, Route } from "react-router-dom";
+
+//import components from routes
+import Home from "./routes/home/home.component";
+import NavigationBar from "./routes/navigation-bar/navigation-bar.component.jsx";
+import SignIn from "./routes/sign-in/sign-in.component";
+
+const Shop = () => <h1>shop</h1>;
 
 const App = () => {
-  const categories = [
-    {
-      id: 1,
-      title: "Chapéus",
-      imageUrl: "https://i.ibb.co/cvpntL1/hats.png",
-    },
-    {
-      id: 2,
-      title: "Jaquetas",
-      imageUrl: "https://i.ibb.co/px2tCc3/jackets.png",
-    },
-    {
-      id: 3,
-      title: "Tênis",
-      imageUrl: "https://i.ibb.co/0jqHpnp/sneakers.png",
-    },
-    {
-      id: 4,
-      title: "Mulheres",
-      imageUrl: "https://i.ibb.co/GCCdy8t/womens.png",
-    },
-    {
-      id: 5,
-      title: "Homens",
-      imageUrl: "https://i.ibb.co/R70vBrQ/men.png",
-    },
-  ];
-
   return (
-    <div>
-      <Categories categories={categories} />
-    </div>
+    <Routes>
+      <Route path="/" element={<NavigationBar />}>
+        <Route index element={<Home />} />
+        <Route path="shop" element={<Shop />} />
+        <Route path="sign-in" element={<SignIn />} />
+      </Route>
+    </Routes>
   );
 };
 
