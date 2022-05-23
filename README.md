@@ -2,5 +2,6 @@
 
 ## Especificações
 
-Projeto feito utilizando a biblioteca React na versão 18, focado principalmente em Hooks,
-o yarn foi escolhido como gerenciador de Pacotes
+<p>1-Projeto feito utilizando a biblioteca React na versão 18</p> 
+<p>2-O yarn foi escolhido como gerenciador de Pacotes</p> 
+<p>3-O Firebase é utilizado como autenticador e base de dados</p>

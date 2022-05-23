@@ -3,8 +3,10 @@
 //importe do método de inicialização do firebase
 import { initializeApp } from "firebase/app";
 
-//imports para a autenticação do firebase
+//imports para a autenticação do firebase, sign with popup and redirect
 import { getAuth, signInWithRedirect, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+//import para verificação por email e senha, como não ocnta com o provedor só é necessário o import do método
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 //imports para o BD firebase
 //o doc que nos informa o documento, o get serve para utilização do doc e o set para setarmos o doc
@@ -25,7 +27,7 @@ const firebaseConfig = {
 // inicializando o firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
-//instanciando um provider
+//instanciando um provedor, que pod ser o google, o facebook, github, etc..
 const provider = new GoogleAuthProvider();
 
 //setando opções do provider
@@ -34,10 +36,14 @@ provider.setCustomParameters({
 });
 
 //auth recebe a autenticação
+//o auth é como um banco de memoria atrelado ao firebase onde ele acompanha todas as autenticações realizadas no site independentemente do local
 export const auth = getAuth();
 
 //criando método de login baseado no Google popup, recebe a auth e o provider instanciados previamente, é possível usar outra método como o redirect
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+//login com google redirect
+//ao usar o redirect somo redirecionados para realização do login, isso faz com que o site seja desmontado e ações perdidas, para realizar a verificação após a volta é necessário receber o retorno do redirect por meio do 'getRedirectResult' disponível no firebase
+export const signInWithGoogleRedirect = () => signInWithRedirect(auth, provider);
 
 //####################### firebase BD #######################
 
@@ -46,6 +52,9 @@ export const db = getFirestore();
 
 //método para criar um documento após a autenticação, recebe o user autenticado
 export const createUserDocumentFromAuth = async (userAuth) => {
+  //if para 'proteger' uma execução sem o valor necessário
+  if (!userAuth) return;
+
   //parâmetros: 1 'db' banco de dados, 2 'users' nome da collection, 3 'userAuth.uid' identificador id
   const userDocRef = doc(db, "users", userAuth.uid);
 
@@ -74,4 +83,12 @@ export const createUserDocumentFromAuth = async (userAuth) => {
   }
 
   return userDocRef;
+};
+
+//função para criar autenticação de user com email e senha
+export const createAuthUserWithEmailAndPassword = (email, password) => {
+  //if para 'proteger' uma execução sem o valor necessário
+  if (!email || !password) return;
+  //chamada da função importada do firebase para criação de um user com email e senha
+  return createUserWithEmailAndPassword(auth, email, password);
 };
