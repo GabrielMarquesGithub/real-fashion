@@ -4,9 +4,9 @@
 import { initializeApp } from "firebase/app";
 
 //imports para a autenticação do firebase, sign with popup and redirect
-import { getAuth, signInWithRedirect, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 //import para verificação por email e senha, como não ocnta com o provedor só é necessário o import do método
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 //imports para o BD firebase
 //o doc que nos informa o documento, o get serve para utilização do doc e o set para setarmos o doc
@@ -41,9 +41,9 @@ export const auth = getAuth();
 
 //criando método de login baseado no Google popup, recebe a auth e o provider instanciados previamente, é possível usar outra método como o redirect
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
-//login com google redirect
-//ao usar o redirect somo redirecionados para realização do login, isso faz com que o site seja desmontado e ações perdidas, para realizar a verificação após a volta é necessário receber o retorno do redirect por meio do 'getRedirectResult' disponível no firebase
-export const signInWithGoogleRedirect = () => signInWithRedirect(auth, provider);
+
+//entrar com email e senha
+export const signInNotProvider = (email, password) => signInWithEmailAndPassword(auth, email, password);
 
 //####################### firebase BD #######################
 

@@ -1,32 +1,44 @@
-import "./sign-up-form.style.scss";
+import "./sign-in-form.style.scss";
+//importe do firebase utils para realização do login pelo google
+import { signInWithGooglePopup, createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
+
+import { useState } from "react";
 
 //import de componentes
 import Button from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
 
-import { useState } from "react";
-
-//import da função de criação utilizando form, vinda do firebase utils
-import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
+//import de função para realização do login
+import { signInNotProvider } from "../../utils/firebase/firebase.utils";
 
 //importe da lista de erros
 import { LIST_ERRORS } from "../../utils/firebase/list-errors";
 
-//criando um objeto padrão dos compos do form
 const defaultFormsFields = {
-  name: "",
   email: "",
   password: "",
-  passwordConfirm: "",
 };
 
-const SignUpForm = () => {
+const SignInForm = () => {
+  //######################### login via google popup #########################
+
+  //login via google
+  const logGooglePopup = async () => {
+    //usando a função importada para realização de autenticação
+    //a resposta está sendo desconstruída para recuperação do elemento 'user' para ser guardado na base de dados
+    const { user } = await signInWithGooglePopup(); //---- assíncrono
+    //usando um função importada para registrar user na 'BD'
+    const userDocRef = await createUserDocumentFromAuth(user);
+  };
+
+  //######################### login via email e senha #########################
+
   // usando o objeto criado para iniciar o state 'formsFields'
   const [formsFields, setFormsFields] = useState(defaultFormsFields);
   //desestruturando objeto para facilitar a manipulação
-  const { name, email, password, passwordConfirm } = formsFields;
+  const { email, password } = formsFields;
 
-  //função para resetar ao estado padrão os campos do form
+  //função para dar reset para o estado padrão dos campos do form
   const resetFormsFields = () => setFormsFields(defaultFormsFields);
 
   //criação da função para executar sempre que ocorrer um submit, criando a autenticação do user se o processo estiver correto
@@ -34,21 +46,13 @@ const SignUpForm = () => {
   const handleSubmit = async (event) => {
     //previvir execuções padrões como atualização da pagina por submit
     event.preventDefault();
-
-    //conformação de senhas iguais
-    if (password !== passwordConfirm) {
-      alert(LIST_ERRORS.senhasDiferente);
-    }
-
-    //prevenção contra erros ao criar user
     try {
-      //chamando método importado para criar autenticação do usuário
-      const response = await createAuthUserWithEmailAndPassword(email, password); // assíncrono
-      //usando método para gravar na BD o user
-      await createUserDocumentFromAuth({ ...response.user, displayName: name }); //- assíncrono
+      const response = await signInNotProvider(email, password);
+      console.log(response.user);
+      //chamada para função de reset
       resetFormsFields();
     } catch (error) {
-      //erros
+      //erro se o usuário não existe
       alert(LIST_ERRORS[error.code]);
     }
   };
@@ -57,33 +61,27 @@ const SignUpForm = () => {
   const handleChange = (event) => {
     //pegando o name e value do elemento que realizou o evento
     const { name, value } = event.target;
-    //setando o valor baseado nos campos que dispararam o event
-    //rest para espalhar os valores que já estavam e depois a chave que foi alterada pelo event
-    //usando o operado '[]' pode-se usar uma var para indicar o 'nome' de outra
+
     setFormsFields({ ...formsFields, [name]: value });
   };
 
   //inputs recebem a função do change, o nome para possibilitar um correta edição usando o name que 'handleChange' recebe pelo event, e o value para que o valor dentro do campo esteja atrelado ao state que doi desconstruído
   return (
     <div className="sign-up-container">
-      <h2>Não possui uma conta?</h2>
-      <span>Inscreva-se com seu E-mail e senha</span>
+      <h2>Já possui uma conta?</h2>
+      <span>Realize login</span>
       <form onSubmit={handleSubmit}>
-        <FormInput label="Nome" type="text" required onChange={handleChange} name="name" value={name} />
         <FormInput label="E-mail" type="email" required onChange={handleChange} name="email" value={email} />
         <FormInput label="Senha" type="password" required onChange={handleChange} name="password" value={password} />
-        <FormInput
-          label="Confirme sua senha"
-          type="password"
-          required
-          onChange={handleChange}
-          name="passwordConfirm"
-          value={passwordConfirm}
-        />
-        <Button type="submit">Inscreva-se</Button>
+        <div className="buttons-container">
+          <Button type="submit">Entrar</Button>
+          <Button type="button" buttonType="google" onClick={logGooglePopup}>
+            Login com Google
+          </Button>
+        </div>
       </form>
     </div>
   );
 };
 
-export default SignUpForm;
+export default SignInForm;
