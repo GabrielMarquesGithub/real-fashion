@@ -1,15 +1,17 @@
+//import css ou scss
 import "./sign-in-form.style.scss";
+
 //importe do firebase utils para realização do login pelo google
 import { signInWithGooglePopup, createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
+//import de função para realização do login com email e senha, not provider
+import { signInNotProvider } from "../../utils/firebase/firebase.utils";
 
+//importe do react, principalmente hooks
 import { useState } from "react";
 
 //import de componentes
 import Button from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
-
-//import de função para realização do login
-import { signInNotProvider } from "../../utils/firebase/firebase.utils";
 
 //importe da lista de erros
 import { LIST_ERRORS } from "../../utils/firebase/list-errors";
@@ -26,9 +28,7 @@ const SignInForm = () => {
   const logGooglePopup = async () => {
     //usando a função importada para realização de autenticação
     //a resposta está sendo desconstruída para recuperação do elemento 'user' para ser guardado na base de dados
-    const { user } = await signInWithGooglePopup(); //---- assíncrono
-    //usando um função importada para registrar user na 'BD'
-    const userDocRef = await createUserDocumentFromAuth(user);
+    await signInWithGooglePopup(); //---- assíncrono
   };
 
   //######################### login via email e senha #########################
@@ -47,9 +47,8 @@ const SignInForm = () => {
     //previvir execuções padrões como atualização da pagina por submit
     event.preventDefault();
     try {
-      const response = await signInNotProvider(email, password);
-      console.log(response.user);
-      //chamada para função de reset
+      //recebendo resposta do login, passando o E-mail e senha
+      await signInNotProvider(email, password);
       resetFormsFields();
     } catch (error) {
       //erro se o usuário não existe

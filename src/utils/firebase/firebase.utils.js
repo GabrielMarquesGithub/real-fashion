@@ -3,9 +3,12 @@
 //importe do método de inicialização do firebase
 import { initializeApp } from "firebase/app";
 
+//import método de logoff do firebase, e o método de 'escutar' alterações do auth
+import { signOut, onAuthStateChanged } from "firebase/auth";
+
 //imports para a autenticação do firebase, sign with popup and redirect
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-//import para verificação por email e senha, como não ocnta com o provedor só é necessário o import do método
+//import para verificação por email e senha, como não conta com o provedor só é necessário o import do método
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 //imports para o BD firebase
@@ -85,6 +88,8 @@ export const createUserDocumentFromAuth = async (userAuth) => {
   return userDocRef;
 };
 
+//####################### firebase LOGIN com E-mail e senha #######################
+
 //função para criar autenticação de user com email e senha
 export const createAuthUserWithEmailAndPassword = (email, password) => {
   //if para 'proteger' uma execução sem o valor necessário
@@ -92,3 +97,11 @@ export const createAuthUserWithEmailAndPassword = (email, password) => {
   //chamada da função importada do firebase para criação de um user com email e senha
   return createUserWithEmailAndPassword(auth, email, password);
 };
+
+//método de realizar log off
+export const userSignOut = () => signOut(auth);
+
+//####################### Analise de aliterações do auth #######################
+
+//método para executar o 'onAuthStateChanged' que analisa mudanças no auth, ele recebe como argumentos o auth, e o que será executado quando o auth for alterado
+export const authChangeListener = (callback) => onAuthStateChanged(auth, callback);

@@ -46,6 +46,11 @@ const SignUpForm = () => {
       const response = await createAuthUserWithEmailAndPassword(email, password); // assíncrono
       //usando método para gravar na BD o user
       await createUserDocumentFromAuth({ ...response.user, displayName: name }); //- assíncrono
+
+      // ####### utilização context #######
+      // desativado para utilização do observe
+      // setCurrentUser(user);
+
       resetFormsFields();
     } catch (error) {
       //erros

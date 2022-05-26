@@ -1,21 +1,33 @@
-//importes tanto da react quando do reactDOM
+//importes tanto do React quando do reactDOM
 import React from "react";
 import ReactDOM from "react-dom/client";
 //import React Router
 import { BrowserRouter } from "react-router-dom";
 //import de style
 import "./index.scss";
-//importe do componente App
+//importe do componente App e Context
 import App from "./App";
+
+//import do context, é mais provável que o Products provider necessitem dos dados do user, para uma filtragem por localização por exemplo, então ele precisaria ser adicionado como filho para acessar o dados --- isso pode variar de projeto para projeto
+import { UserProvider } from "./contexts/user.context";
+import { ProductsProvider } from "./contexts/products.context";
+import { CartProvider } from "./contexts/cart.context";
+
 import reportWebVitals from "./reportWebVitals";
 
 //utilização do React DOM para renderizar códigos utilizando React no browser
 const root = ReactDOM.createRoot(document.getElementById("root"));
-//a tag de 'StrictMode' para averiguar erros deve envolver tudo, a tag 'BrowserRouter' deve envolver o app parai ndicar a utilização do React Router
+//a tag de 'StrictMode' para averiguar erros deve envolver tudo, a tag 'BrowserRouter' deve envolver o app para indicar a utilização do React Router visando a navegação via url, e o 'UserProvider' vem posteriormente indicando acesso do context
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <UserProvider>
+        <ProductsProvider>
+          <CartProvider>
+            <App />
+          </CartProvider>
+        </ProductsProvider>
+      </UserProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
