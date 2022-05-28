@@ -28,7 +28,6 @@ export const UserProvider = ({ children }) => {
       if (user) {
         createUserDocumentFromAuth(user);
       }
-      console.log(user);
       //setando o valor do user quando o auth é alterado, permitindo uma execução centralizada e com maior desempenho
       setCurrentUser(user);
     });
