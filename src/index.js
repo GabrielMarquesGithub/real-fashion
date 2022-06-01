@@ -10,7 +10,7 @@ import App from "./App";
 
 //import do context, é mais provável que o Products provider necessitem dos dados do user, para uma filtragem por localização por exemplo, então ele precisaria ser adicionado como filho para acessar o dados --- isso pode variar de projeto para projeto
 import { UserProvider } from "./contexts/user.context";
-import { ProductsProvider } from "./contexts/products.context";
+import { CategoriesProvider } from "./contexts/categories.context";
 import { CartProvider } from "./contexts/cart.context";
 
 import reportWebVitals from "./reportWebVitals";
@@ -22,11 +22,11 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <UserProvider>
-        <ProductsProvider>
+        <CategoriesProvider>
           <CartProvider>
             <App />
           </CartProvider>
-        </ProductsProvider>
+        </CategoriesProvider>
       </UserProvider>
     </BrowserRouter>
   </React.StrictMode>

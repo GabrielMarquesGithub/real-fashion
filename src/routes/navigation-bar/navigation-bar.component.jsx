@@ -1,5 +1,5 @@
 //import Outlet é basicamente um componente representando, o componenete em conjunto dentro das 'Routes'
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 //import do context e do useContext para utilização do context
 import { UserContext } from "../../contexts/user.context";
@@ -12,7 +12,9 @@ import { userSignOut } from "../../utils/firebase/firebase.utils";
 
 //import de um SVG para logo, foi passado para o nome 'LogoCoroa'
 import { ReactComponent as LogoCoroa } from "../../assets/crown.svg";
-import "./navigation-bar.style.scss";
+
+// ####################### import style #######################
+import { BgDropdownMenu, LogoContainer, NavigationContainer, NavLink, NavLinksContainer } from "./navigation-bar.style";
 
 //import component icon svg, e do menu dropdown
 import CartIcon from "../../components/cart-icon/cart-icon.component";
@@ -25,36 +27,32 @@ const NavigationBar = () => {
 
   return (
     <>
-      <div className="navigation">
-        <Link className="logo-container" to="/">
+      <NavigationContainer>
+        <LogoContainer to="/">
           <LogoCoroa className="logo" />
-        </Link>
+        </LogoContainer>
 
-        <div className="nav-links-container">
-          <Link className="nav-link" to="/shop">
-            SHOP
-          </Link>
+        <NavLinksContainer>
+          <NavLink to="/shop">SHOP</NavLink>
           {currentUser ? (
-            <Link onClick={userSignOut} className="nav-link" to="/authentication">
+            <NavLink as="span" onClick={userSignOut} to="/authentication">
               SAIR
-            </Link>
+            </NavLink>
           ) : (
-            <Link className="nav-link" to="/authentication">
-              ENTRAR
-            </Link>
+            <NavLink to="/authentication">ENTRAR</NavLink>
           )}
           <span onClick={() => setIsCartOpen(!isCartOpen)}>
             <CartIcon />
           </span>
-        </div>
+        </NavLinksContainer>
 
         {isCartOpen && (
           <>
-            <div onClick={() => setIsCartOpen(!isCartOpen)} className="bg-dropdown-menu"></div>
+            <BgDropdownMenu onClick={() => setIsCartOpen(!isCartOpen)}></BgDropdownMenu>
             <CartDropdown />
           </>
         )}
-      </div>
+      </NavigationContainer>
       <Outlet />
     </>
   );

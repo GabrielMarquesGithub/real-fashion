@@ -1,6 +1,7 @@
 //####################### Importes #######################
 
 //importe do método de inicialização do firebase
+import { async } from "@firebase/util";
 import { initializeApp } from "firebase/app";
 
 //import método de logoff do firebase, e o método de 'escutar' alterações do auth
@@ -14,6 +15,11 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "fire
 //imports para o BD firebase
 //o doc que nos informa o documento, o get serve para utilização do doc e o set para setarmos o doc
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+
+//importes focados no upload de dados
+import { collection, writeBatch } from "firebase/firestore";
+//importe para realização do get dos dados
+import { query, getDocs } from "firebase/firestore";
 
 //####################### firebase autenticação #######################
 
@@ -101,7 +107,57 @@ export const createAuthUserWithEmailAndPassword = (email, password) => {
 //método de realizar log off
 export const userSignOut = () => signOut(auth);
 
-//####################### Analise de aliterações do auth #######################
+//####################### Analise de alterações do auth #######################
 
 //método para executar o 'onAuthStateChanged' que analisa mudanças no auth, ele recebe como argumentos o auth, e o que será executado quando o auth for alterado
 export const authChangeListener = (callback) => onAuthStateChanged(auth, callback);
+
+//####################### FireStore - upload de dados para o BD #######################
+
+//método para gravar uma coleção já com documentos dentro dela, primeiro parâmetro será a chave 'nome' da coleção e o segundo os objeto para a coleção
+//como deve será gravado na BD deve ser uma função 'async'
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  //é chamado o 'db' que referencia o 'data base', dentro da db usamos o 'collectionKey' para identificar a coleção para assim criar a referencia para a coleção
+  const collectionRef = collection(db, collectionKey);
+
+  //o 'writeBatch' deve receber o 'db', ele retorna um batch(lote) que é usando para a realização de transações
+  //o batch permite fazermos alterações na db
+  const batch = writeBatch(db);
+
+  //usando um método para ler os objetos passados, tornando a realizações das ações algo dinâmico
+  objectsToAdd.forEach((object) => {
+    //doc recebe collectionRef pois ele informa corretamente qual o db que está sendo usado, e como chave recebe o titulo do objeto, pois cada titulo faz referencia a um único objeto, e a outra chave referencia os produtos contidos nele, o objeto pode ser visualizado em 'src/shop-data.js'
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+
+    //o método 'set' presente em batch recebe a referencia de doc indicando o seu local na base de dados, depois recebe o dado a ser alocado dentro dessa referencia - vale destacar que a referencia é criada mesmo antes do preenchimento dela
+    batch.set(docRef, object);
+  });
+
+  //o método commit serve como 'conformador' para averiguar se a ação de transação ocorreu corretamente
+  await batch.commit(); //--- assíncrono
+};
+
+//####################### FireStore - download dos dados do db #######################
+
+//método para obter os dados do db
+export const getCategoriesAndDocuments = async () => {
+  //a chave poder ser inserida de diversas maneiras, como se sabe diretamente a chave foi inserida manualmente
+  const collectionRef = collection(db, "categories");
+
+  //query cria um instancia que recebe a collection onde ela realizara as consultas
+  const q = query(collectionRef);
+
+  //o 'getDocs' recebendo a instancia do query retorna um snapshot do documento, permitindo acessa-lo
+  const querySnapshot = await getDocs(q); // --- assíncrono
+
+  // 'querySnapshot.docs' retorna os objetos reais
+  //para a estruturação iremos usar o reduce
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    // 'docSnapshot.data()' retorna todos os dados presente no local referenciado, o 'data' pode receber regras para como os dados serão recuperados
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+
+  return categoryMap;
+};

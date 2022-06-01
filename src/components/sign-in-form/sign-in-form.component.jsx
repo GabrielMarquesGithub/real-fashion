@@ -1,8 +1,8 @@
 //import css ou scss
-import "./sign-in-form.style.scss";
+import { ButtonsContainer, SignInContainer } from "./sign-in-form.style";
 
 //importe do firebase utils para realização do login pelo google
-import { signInWithGooglePopup, createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
+import { signInWithGooglePopup } from "../../utils/firebase/firebase.utils";
 //import de função para realização do login com email e senha, not provider
 import { signInNotProvider } from "../../utils/firebase/firebase.utils";
 
@@ -10,7 +10,7 @@ import { signInNotProvider } from "../../utils/firebase/firebase.utils";
 import { useState } from "react";
 
 //import de componentes
-import Button from "../button/button.component";
+import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
 
 //importe da lista de erros
@@ -66,20 +66,20 @@ const SignInForm = () => {
 
   //inputs recebem a função do change, o nome para possibilitar um correta edição usando o name que 'handleChange' recebe pelo event, e o value para que o valor dentro do campo esteja atrelado ao state que doi desconstruído
   return (
-    <div className="sign-up-container">
+    <SignInContainer>
       <h2>Já possui uma conta?</h2>
       <span>Realize login</span>
       <form onSubmit={handleSubmit}>
         <FormInput label="E-mail" type="email" required onChange={handleChange} name="email" value={email} />
         <FormInput label="Senha" type="password" required onChange={handleChange} name="password" value={password} />
-        <div className="buttons-container">
+        <ButtonsContainer>
           <Button type="submit">Entrar</Button>
-          <Button type="button" buttonType="google" onClick={logGooglePopup}>
+          <Button type="button" buttonType={BUTTON_TYPE_CLASSES.google} onClick={logGooglePopup}>
             Login com Google
           </Button>
-        </div>
+        </ButtonsContainer>
       </form>
-    </div>
+    </SignInContainer>
   );
 };
 

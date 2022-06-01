@@ -1,4 +1,4 @@
-import "./sign-up-form.style.scss";
+import { SignUpContainer } from "./sign-up-form.style";
 
 //import de componentes
 import Button from "../button/button.component";
@@ -70,7 +70,7 @@ const SignUpForm = () => {
 
   //inputs recebem a função do change, o nome para possibilitar um correta edição usando o name que 'handleChange' recebe pelo event, e o value para que o valor dentro do campo esteja atrelado ao state que doi desconstruído
   return (
-    <div className="sign-up-container">
+    <SignUpContainer>
       <h2>Não possui uma conta?</h2>
       <span>Inscreva-se com seu E-mail e senha</span>
       <form onSubmit={handleSubmit}>
@@ -87,7 +87,7 @@ const SignUpForm = () => {
         />
         <Button type="submit">Inscreva-se</Button>
       </form>
-    </div>
+    </SignUpContainer>
   );
 };
 

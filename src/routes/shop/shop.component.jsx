@@ -1,18 +1,17 @@
-import { useContext } from "react";
-import ProductCard from "../../components/product-card/product-card.component";
-import { ProductsContext } from "../../contexts/products.context";
-//css ou scss
-import "./shop.style.scss";
+//shop se tornou uma rota com aninhamentos, algo proximo ao realizado por 'App'
+
+//import do React Routes para trabalhar com rotas
+import { Routes, Route } from "react-router-dom";
+
+import CategoriesPreview from "../categories-preview/categories-preview.component";
+import Category from "../category/category.component";
 
 const Shop = () => {
-  const { products } = useContext(ProductsContext);
-
   return (
-    <div className="products-container">
-      {products.map((value) => {
-        return <ProductCard key={value.id} product={value} />;
-      })}
-    </div>
+    <Routes>
+      <Route index element={<CategoriesPreview />} />
+      <Route path=":category" element={<Category />} />
+    </Routes>
   );
 };
 
