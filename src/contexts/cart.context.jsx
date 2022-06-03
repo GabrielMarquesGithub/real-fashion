@@ -1,5 +1,8 @@
 // imports do react
-import { createContext, useEffect, useState } from "react";
+import { createContext, useReducer } from "react";
+
+//import para optimização de escrita do reducer utils
+import { createAction } from "../utils/reducer/reducer.utils";
 
 export const CartContext = createContext({
   isCartOpen: false,
@@ -49,24 +52,64 @@ const addCartItem = (product, cartItems) => {
   return [...cartItems, { ...product, num: 1 }];
 };
 
+//ações por type
+export const CART_ACTION_TYPES = {
+  SET_CART_OPEN: "SET_CART_OPEN",
+  SET_CART_ITEMS: "SET_CART_ITEMS",
+};
+const cartReducer = (state, action) => {
+  const { type, payload } = action;
+  //usando switch para executar o reducer
+  switch (type) {
+    //caso 1..
+    case CART_ACTION_TYPES.SET_CART_OPEN:
+      return {
+        ...state,
+        isCartOpen: payload,
+      };
+    case CART_ACTION_TYPES.SET_CART_ITEMS:
+      return {
+        ...state,
+        //payload está recebendo um objeto, para preenchimento rápido utilizamos rest
+        ...payload,
+      };
+    //caso default
+    default:
+      throw new Error(`Type desconhecido ${type} no cart reducer`);
+  }
+};
+//sets iniciais para os items do state
+const INITIAL_STATE = {
+  isCartOpen: false,
+  cartItems: [],
+  cartCount: 0,
+  cartTotalValue: 0,
+};
+//provider do cart
 export const CartProvider = ({ children }) => {
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
-  const [cartCount, setCartCount] = useState(0);
-  const [cartTotalValue, setCartTotalValue] = useState(0);
+  //'States' forem substituídos pelo 'reducer'
+  const [state, dispatch] = useReducer(cartReducer, INITIAL_STATE);
+  //desestruturando para obtenção dos valores do objeto 'state' do 'reducer'
+  const { isCartOpen, cartItems, cartCount, cartTotalValue } = state;
 
-  //função para atualizar o 'cartCount'
-  //o ideal é que cada função execute apenas uma ação, foi utilizada apena um 'useEffect' por ser um código que não executa tantas ações
-  useEffect(() => {
-    //o método 'reduce' percorre um array com a ideia de 'somar' os elementos, e retorna o total, a função que ele recebe tem como parâmetro, o total que será retornado, e o elemento do array que ele está inteirando
-    //soma o valor total dentro do Cart, quantidade de itens vezes o preço
-    const newCartValue = cartItems.reduce((total, cartItem) => total + cartItem.num * cartItem.price, 0);
-    //atualiza a quantidade de itens dentro do cart
-    const newCartCount = cartItems.reduce((total, cartItem) => total + cartItem.num, 0);
-    setCartTotalValue(newCartValue);
-    setCartCount(newCartCount);
-    //use state será executado toda vez que o 'cartItems' sofrer execuções, algo proximo ao DidUpdate
-  }, [cartItems]);
+  //chamada para alteração de estado sobre o carro está aberto
+  const setIsCartOpen = (open) => dispatch(createAction(CART_ACTION_TYPES.SET_CART_OPEN, open));
+
+  //utilizando a antiga função set do 'useState', quando ela for chamada e receber os novos items irá chamar o dispatch do reducer
+  const setCartItems = (items) => {
+    //'dispatch' do reducer recebendo o 'type' e o 'payload', o payload é retornado por uma função
+    dispatch(createAction(CART_ACTION_TYPES.SET_CART_ITEMS, updateCartItems(items)));
+  };
+
+  //função que retorna o payload completo para o 'cartItems', substitui o 'useEffect'
+  const updateCartItems = (items) => {
+    //usando o reduce para 'somar' o valor total dos items presentes no cart
+    const newCartValue = items.reduce((total, cartItem) => total + cartItem.num * cartItem.price, 0);
+    //reduce para somar a quantidade de items
+    const newCartCount = items.reduce((total, cartItem) => total + cartItem.num, 0);
+    //retorno de um objeto já com os items, valor total, e quantidade
+    return { cartItems: items, cartTotalValue: newCartValue, cartCount: newCartCount };
+  };
 
   //função para verificar se já há produto no carro, e se houver apenas modificar a quantidade e não adicionar outro
   const addItemToCart = (product) => {

@@ -15,21 +15,20 @@ export const CategoryBodyContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid black;
-  background-color: white;
-  opacity: 0.7;
+  text-shadow: 2px 2px 2px black;
+  opacity: 0.5;
+  color: white;
   position: absolute;
 
   h2 {
     font-weight: bold;
     margin: 0 6px 0;
-    font-size: 22px;
-    color: #4a4a4a;
+    font-size: 30px;
   }
 
   p {
     font-weight: lighter;
-    font-size: 16px;
+    font-size: 22px;
   }
 `;
 
@@ -38,9 +37,8 @@ export const CategoryContainer = styled.div`
   height: 240px;
   flex: 1 1 auto;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid black;
+  align-items: end;
+  justify-content: end;
   margin: 0 7.5px 15px;
   overflow: hidden;
 

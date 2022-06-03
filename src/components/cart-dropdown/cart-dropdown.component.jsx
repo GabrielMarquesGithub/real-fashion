@@ -21,6 +21,7 @@ const CartDropdown = () => {
 
   return (
     <CartDropdownContainer>
+      <h2>Carrinho</h2>
       <CartItems>
         {!cartItems.length ? (
           <EmptyMessage>Carrinho Vazio</EmptyMessage>

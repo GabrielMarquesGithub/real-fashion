@@ -10,11 +10,16 @@ import { CartContext } from "../../contexts/cart.context";
 
 import { userSignOut } from "../../utils/firebase/firebase.utils";
 
-//import de um SVG para logo, foi passado para o nome 'LogoCoroa'
-import { ReactComponent as LogoCoroa } from "../../assets/crown.svg";
-
 // ####################### import style #######################
-import { BgDropdownMenu, LogoContainer, NavigationContainer, NavLink, NavLinksContainer } from "./navigation-bar.style";
+import {
+  BgDropdownMenu,
+  CartIconContainer,
+  LogoContainer,
+  LogoCoroaStyle,
+  NavigationContainer,
+  NavLink,
+  NavLinksContainer,
+} from "./navigation-bar.style";
 
 //import component icon svg, e do menu dropdown
 import CartIcon from "../../components/cart-icon/cart-icon.component";
@@ -29,7 +34,7 @@ const NavigationBar = () => {
     <>
       <NavigationContainer>
         <LogoContainer to="/">
-          <LogoCoroa className="logo" />
+          <LogoCoroaStyle className="logo" />
         </LogoContainer>
 
         <NavLinksContainer>
@@ -41,9 +46,9 @@ const NavigationBar = () => {
           ) : (
             <NavLink to="/authentication">ENTRAR</NavLink>
           )}
-          <span onClick={() => setIsCartOpen(!isCartOpen)}>
+          <CartIconContainer open={isCartOpen} onClick={() => setIsCartOpen(!isCartOpen)}>
             <CartIcon />
-          </span>
+          </CartIconContainer>
         </NavLinksContainer>
 
         {isCartOpen && (
