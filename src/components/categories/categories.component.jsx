@@ -8,7 +8,7 @@ const Categories = () => {
       id: 1,
       title: "Acessórios",
       imageUrl: "https://i.ibb.co/cvpntL1/hats.png",
-      route: "shop/chapéus",
+      route: "shop/acessórios",
     },
     {
       id: 2,

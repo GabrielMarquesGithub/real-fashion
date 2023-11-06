@@ -33,13 +33,16 @@ const Category = () => {
   }, [category, categoriesMap]);
 
   useEffect(() => {
-    const productsFilter = (products || []).filter((value) => value.name.toLowerCase().includes(searchValue));
+    const productsFilter = (products || []).filter((value) =>
+      value.name.toLowerCase().includes(searchValue)
+    );
     setProductsShown(productsFilter);
     console.log(products);
   }, [searchValue, products]);
 
   //função de atualização da search-box
-  const handleSearch = (e) => setSearchValue(e.target.value.toLocaleLowerCase());
+  const handleSearch = (e) =>
+    setSearchValue(e.target.value.toLocaleLowerCase());
   const resetSearch = () => setSearchValue("");
 
   return (
@@ -47,12 +50,20 @@ const Category = () => {
       <HeaderContainer>
         <CategoryShopTitle>{category.toUpperCase()}</CategoryShopTitle>
         <SearchInputContainer>
-          <SearchInputStyle placeholder="Pesquise" type="text" onChange={handleSearch} value={searchValue} />
+          <SearchInputStyle
+            placeholder="Pesquise"
+            type="text"
+            onChange={handleSearch}
+            value={searchValue}
+          />
           <SearchButton type="reset" onClick={resetSearch} />
         </SearchInputContainer>
       </HeaderContainer>
       <CategoryShopContainer>
-        {productsShown && productsShown.map((product) => <ProductCard key={product.id} product={product} />)}
+        {productsShown &&
+          productsShown.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
       </CategoryShopContainer>
     </>
   );
