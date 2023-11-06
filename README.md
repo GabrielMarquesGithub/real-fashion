@@ -6,11 +6,11 @@ Você pode acessar a versão implantada deste projeto [aqui](https://euphonious-
 
 ## Imagens
 
-![Imagem da página inicial do projeto](https://github.com/NikisGabriel/real-fashion/blob/main/documents/real-fashion.png)
-![Imagem do carrinho do projeto](https://github.com/NikisGabriel/real-fashion/blob/main/documents/real-fashion-cart.png)
-![Imagem da página de produtos](https://github.com/NikisGabriel/real-fashion/blob/main/documents/real-fashion-products.png)
-![Imagem da página de login do projeto](https://github.com/NikisGabriel/real-fashion/blob/main/documents/real-fashion-login.png)
-![Imagem da página de checkout do projeto](https://github.com/NikisGabriel/real-fashion/blob/main/documents/real-fashion-checkout.png)
+![Imagem da página inicial do projeto](https://github.com/NikisGabriel/real-fashion/blob/master/documents/real-fashion.png)
+![Imagem do carrinho do projeto](https://github.com/NikisGabriel/real-fashion/blob/master/documents/real-fashion-cart.png)
+![Imagem da página de produtos](https://github.com/NikisGabriel/real-fashion/blob/master/documents/real-fashion-products.png)
+![Imagem da página de login do projeto](https://github.com/NikisGabriel/real-fashion/blob/master/documents/real-fashion-login.png)
+![Imagem da página de checkout do projeto](https://github.com/NikisGabriel/real-fashion/blob/master/documents/real-fashion-checkout.png)
 
 ## Tecnologias Utilizadas
 
